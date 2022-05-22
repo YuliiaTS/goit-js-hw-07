@@ -3,51 +3,57 @@ import { galleryItems } from "./gallery-items.js";
 
 console.log(galleryItems);
 
-const galleryDiv = document.querySelector('.gallery');
+const galleryDiv = document.querySelector(".gallery");
 const galleryImg = createGaleryItems(galleryItems);
 
 function createGaleryItems() {
   return galleryItems
     .map(
-      (item) =>
+      ({preview, original, description}) =>
         `<div class='gallery__item'>
         <a class='gallery__link' 
-        href='${item.original}'>
+        href='${original}'>
         <img
         class='gallery__image'
-        src='${item.preview}'
-        data-source='${item.original}'
-        alt='${item.description}'
+        src='${preview}'
+        data-source='${original}'
+        alt='${description}'
         />
         </a>
         </div>`
     )
-    .join('');
+    .join("");
 }
-galleryDiv.insertAdjacentHTML('beforeend', galleryImg);
+galleryDiv.insertAdjacentHTML("beforeend", galleryImg);
 
-galleryDiv.addEventListener('click', onShowImgByClick);
+galleryDiv.addEventListener("click", onShowImgByClick);
 
 function onShowImgByClick(event) {
   event.preventDefault();
 
-  if (event.target.nodeName !== 'IMG') {
+  if (event.target.nodeName !== "IMG") {
     return;
   }
-
+  
   const instance = basicLightbox.create(
-    `<img src='${event.target.getAttribute(['data-source'])}'>
+    `<img src='${event.target.getAttribute(["data-source"])}'>
 `,
     {
       onShow: (instance) => {
-        window.addEventListener('keydown', onEscPressCloce);
+        window.addEventListener("keydown", onEscPressCloce);
         function onEscPressCloce(event) {
-          if (event.key === 'Escape') {
+          if (event.key === "Escape") {
             instance.close();
-            window.removeEventListener('keydown', onEscPressCloce);
+            window.removeEventListener("keydown", onEscPressCloce);
           }
         }
       },
+    },
+    {
+      onClose: (instance) => {
+        instance.close();
+        galleryDiv.removeEventListener("click", onShowImgByClick);
+      }
     }
   );
   instance.show();
