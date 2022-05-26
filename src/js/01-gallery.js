@@ -26,7 +26,7 @@ function createGaleryItems() {
 }
 galleryDiv.insertAdjacentHTML("beforeend", galleryImg);
 
-galleryDiv.addEventListener("click", onShowImgByClick);
+galleryDiv.addEventListener("click", onShowImgByClick,);
 
 function onShowImgByClick(event) {
   event.preventDefault();
